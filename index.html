@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html ng-app="pokemonApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pokemon App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+</head>
+
+<body>
+    <div class="container" ng-controller="PokemonController">
+
+        <div class="screen">
+            <div class="cont-left">
+                <input type="text" ng-model="searchText" placeholder="Buscar Pokemon" ng-change="filterPokemons()"
+                ng-model-options="{ debounce: 500 }" />
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="pokemon in filteredPokemons" ng-click="selectPokemon(pokemon)" class="cell-button">
+                        <td>{{ pokemon.name }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="cont-right">
+                <div class="details-container" ng-if="selectedPokemon">
+                    <h2>{{ selectedPokemon.name | capitalize }}</h2>
+                    <img ng-src="{{ selectedPokemon.sprites.front_default }}" alt="{{ selectedPokemon.name }}">
+                    <p><strong>Peso:</strong> {{ selectedPokemon.weight }}</p>
+                    <p><strong>Altura:</strong> {{ selectedPokemon.height }}</p>
+                    <p><strong>Habilidades:</strong>
+                        <span ng-repeat="ability in selectedPokemon.abilities">
+                            {{ ability.ability.name }}<span ng-if="!$last">, </span>
+                        </span>
+                    </p>
+                    <p><strong>Tipos:</strong>
+                        <span ng-repeat="type in selectedPokemon.types">
+                            {{ type.type.name }}<span ng-if="!$last">, </span>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="pagination">
+            <button ng-click="changePage(currentPage - 1)" ng-disabled="currentPage === 1">Anterior</button>
+            <span>Página {{ currentPage }} de {{ totalPages }}</span>
+            <button ng-click="changePage(currentPage + 1)" ng-disabled="currentPage === totalPages">Siguiente</button>
+        </div>
+
+
+
+        <div class="resume-cont">
+            <h3>Resumen de Pokémon</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Letra</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(letter, count) in pokemonSummary">
+                        <td>{{ letter }}</td>
+                        <td>{{ count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+  
+</body>
+
+</html>
